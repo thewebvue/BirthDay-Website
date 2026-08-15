@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baby's 1st Birthday Celebration</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Playfair Display for elegant headings, Quicksand for clean/warm body text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Canvas Confetti for Celebration Effects -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- Tailwind Custom Theme Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastel: {
+                            pink: '#fff0f3',
+                            pinkhover: '#ffe4e9',
+                            rose: '#f4acc4',
+                            accent: '#d46a84',
+                            cream: '#fcf8f5',
+                            gold: '#dfb15b',
+                            text: '#5a4a4e',
+                            subtext: '#8c787d'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['Quicksand', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styling & Keyframes -->
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: rgba(252, 248, 245, 0.65);
+            color: #5a4a4e;
+            overflow-x: hidden;
+        }
+
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Enhanced Background Gradient Animation */
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animate-gradient-bg {
+            background-size: 300% 300%;
+            animation: gradientMove 8s ease infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(212, 106, 132, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(212, 106, 132, 0.6); transform: scale(1.03); }
+        }
+        .animate-pulse-glow {
+            animation: pulseGlow 2s infinite;
+        }
+
+        /* Floating elements animation */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+            50% { transform: translateY(-20px) rotate(6deg) scale(1.08); }
+        }
+        .animate-float {
+            animation: floatSlow 5s ease-in-out infinite;
+        }
+        
+        @keyframes floatReverse {
+            0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+            50% { transform: translateY(20px) rotate(-6deg) scale(1.08); }
+        }
+        .animate-float-reverse {
+            animation: floatReverse 6s ease-in-out infinite;
+        }
+
+        /* Extra lively animations for welcome screen background items */
+        @keyframes spinSlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spinSlow 15s linear infinite;
+        }
+
+        @keyframes pulseScale {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.25); opacity: 0.9; }
+        }
+        .animate-pulse-scale {
+            animation: pulseScale 4s ease-in-out infinite;
+        }
+
+        /* Rising background decoration animation */
+        @keyframes riseUp {
+            0% { transform: translateY(105vh) scale(0.7) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.85; }
+            85% { opacity: 0.85; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+        .bg-floating-item {
+            position: fixed;
+            animation: riseUp linear infinite;
+            z-index: 1;
+            pointer-events: none;
+            user-select: none;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
+        }
+
+        /* Glassmorphism card styling */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        section, header, footer {
+            background-color: transparent !important;
+        }
+
+        /* Cake flying in from the bottom */
+        @keyframes flyInCake {
+            0% { transform: translateY(150vh) scale(0.2) rotate(-20deg); opacity: 0; }
+            60% { transform: translateY(-10%) scale(1.1) rotate(10deg); opacity: 1; }
+            80% { transform: translateY(5%) scale(0.95) rotate(-5deg); }
+            100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+        }
+        .animate-fly-cake {
+            animation: flyInCake 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* Knife chopping down */
+        @keyframes chopMotion {
+            0% { transform: translate(30px, -30px) rotate(45deg); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translate(-30px, 40px) rotate(0deg); opacity: 0; }
+        }
+        .animate-chop {
+            animation: chopMotion 0.4s ease-in forwards !important;
+        }
+
+        /* Cake slicing and disappearing */
+        @keyframes sliceCakeExplode {
+            0% { transform: scale(1); filter: brightness(1); }
+            30% { transform: scale(0.9) skewX(-10deg); filter: brightness(1.2); }
+            60% { transform: scale(1.3) translateY(-20px); filter: brightness(1.5); opacity: 1; }
+            100% { transform: scale(0) translateY(50px) rotate(20deg); opacity: 0; }
+        }
+        .animate-slice-cake {
+            animation: sliceCakeExplode 0.7s ease-out forwards;
+        }
+
+        /* Bounce entrance animation for cake cutting screen */
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); opacity: 1; }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-bounce-in {
+            animation: bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+    </style>
+</head>
+<body class="selection:bg-pastel-rose selection:text-white relative">
+
+    <!-- GLOBAL BACKGROUND RISING ANIMATION CONTAINER -->
+    <div id="background-animation-container" class="fixed inset-0 overflow-hidden pointer-events-none z-1"></div>
+
+    <!-- WELCOME OVERLAY (Interactive Cake-Cutting Welcome Screen) -->
+    <div id="welcome-overlay" class="fixed inset-0 z-[100] bg-gradient-to-tr from-pastel-pink via-pastel-cream to-pastel-rose animate-gradient-bg flex flex-col items-center justify-center transition-opacity duration-1000 overflow-hidden px-4">
+        
+        <!-- Glowing Magical Ambient Orbs with extra dynamic blurs -->
+        <div class="absolute inset-0 pointer-events-none overflow-hidden z-0">
+            <div class="absolute top-[-15%] left-[-15%] w-[55vw] h-[55vw] bg-pastel-gold/35 rounded-full blur-[90px] animate-pulse-scale"></div>
+            <div class="absolute bottom-[-15%] right-[-15%] w-[60vw] h-[60vw] bg-pastel-accent/25 rounded-full blur-[110px] animate-float"></div>
+            <div class="absolute top-[30%] right-[10%] w-[35vw] h-[35vw] bg-pastel-rose/40 rounded-full blur-[70px] animate-float-reverse"></div>
+        </div>
+
+        <!-- Safe Responsive Animated Elements for Mobile & Desktop -->
+        <div class="absolute inset-0 pointer-events-none overflow-hidden z-0">
+            <div class="absolute top-6 left-6 md:top-12 md:left-24 text-3xl md:text-5xl animate-float opacity-80 drop-shadow-lg">🎈</div>
+            <div class="absolute top-8 right-6 md:top-16 md:right-32 text-3xl md:text-4xl animate-float-reverse opacity-80 drop-shadow-lg" style="animation-delay: 0.8s;">🎁</div>
+            
+            <div class="absolute top-1/3 left-4 md:left-20 text-3xl md:text-4xl animate-float-reverse opacity-70 drop-shadow-md" style="animation-delay: 1.2s;">🧸</div>
+            <div class="absolute top-1/4 right-6 md:right-1/4 text-3xl md:text-5xl animate-float opacity-80 drop-shadow-lg" style="animation-delay: 0.4s;">🌟</div>
+            
+            <div class="absolute bottom-8 left-6 md:bottom-20 md:left-36 text-4xl md:text-5xl animate-float opacity-80 drop-shadow-lg" style="animation-delay: 2.2s;">🧁</div>
+            <div class="absolute bottom-10 right-6 md:bottom-24 md:right-32 text-4xl md:text-6xl animate-float-reverse opacity-80 drop-shadow-lg" style="animation-delay: 1.6s;">✨</div>
+        </div>
+
+        <!-- Premium Glassmorphism Container with Safe Spacing & Scalable Width -->
+        <div class="text-center p-6 sm:p-10 md:p-14 glass-card rounded-[2.5rem] md:rounded-[3rem] shadow-[0_20px_60px_-15px_rgba(212,106,132,0.5)] max-w-lg w-full mx-auto relative z-10 border-2 border-white/90 bg-white/70 my-auto">
+            
+            <div class="inline-flex items-center justify-center space-x-2 mb-2 md:mb-3">
+                <span class="h-px w-6 md:w-8 bg-pastel-accent/40"></span>
+                <span class="text-[11px] md:text-xs font-bold uppercase tracking-widest text-pastel-accent">A Magical Moment</span>
+                <span class="h-px w-6 md:w-8 bg-pastel-accent/40"></span>
+            </div>
+            
+            <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-extrabold text-pastel-text mb-2 drop-shadow-sm">You're Invited!</h2>
+            <p class="text-pastel-subtext text-sm sm:text-base md:text-lg font-medium mb-6 md:mb-10">Niresh's 1st Birthday Celebration</p>
+            
+            <!-- INTERACTIVE FLYING CAKE -->
+            <div class="relative group cursor-pointer inline-block mb-6 md:mb-10 transition-transform" onclick="cutCakeAnimation()">
+                
+                <!-- Hidden Knife that appears on hover and animates on click -->
+                <div id="knife-icon" class="absolute -top-10 -right-8 md:-top-12 md:-right-10 text-5xl md:text-6xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform rotate-45 z-20 pointer-events-none drop-shadow-2xl">
+                    🔪
+                </div>
+                
+                <!-- The Cake -->
+                <div id="welcome-cake" class="text-7xl sm:text-8xl md:text-[9.5rem] animate-fly-cake filter drop-shadow-[0_20px_30px_rgba(0,0,0,0.2)] group-hover:scale-110 transition-transform duration-300 group-hover:drop-shadow-[0_25px_35px_rgba(212,106,132,0.3)]">
+                    🎂
+                </div>
+            </div>
+
+            <!-- Call to action prompt -->
+            <div>
+                <p id="cut-prompt" class="text-white bg-pastel-accent font-bold text-sm sm:text-lg md:text-xl animate-pulse-glow py-3 px-6 md:px-8 rounded-full inline-block shadow-lg border border-white/50 transition-opacity duration-300 tracking-wide cursor-pointer hover:bg-[#b8546c]">
+                    Tap the cake to cut it & open! ✨
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CLIENT DATA & EVENT CONFIGURATION -->
+    <script>
+        const clientData = {
+            childName: "Niresh",
+            fullName: "Niresh Sharma",
+            ageText: "Turning One!",
+            birthDate: "2025-03-15",
+            heroSubtitle: "A whole year of endless smiles, tiny footsteps, and pure magic. Join us to celebrate our little prince's first milestone!",
+            
+            // Hero baby photo slider array (Updated with all images)
+            heroImages: [
+                { url: "baby-photo-2.jpg", caption: "March 15 • One Year of Joy" },
+                { url: "baby-photo-3.jpg", caption: "Pure unfiltered laughter" },
+                { url: "baby-photo-4.jpg", caption: "Playtime adventures" },
+                { url: "baby-photo-5.jpg", caption: "Little explorer" },
+                { url: "baby-photo-6.jpg", caption: "Bath time bubbles" },
+                { url: "baby-photo-7.jpg", caption: "My favorite blankie" }
+            ],
+            
+            storyTitle: "365 Days of Pure Joy",
+            storySubtitle: "From his very first cry to his first wobbly steps, look at how much love our little bundle brought into our lives.",
+            milestones: [
+                { title: "Hello World", date: "March 15, 2025", desc: "The day our lives changed forever. You entered the world with a cry that sounded like music.", image: "baby-photo-2.jpg" },
+                { title: "First Smile", date: "May 2025", desc: "That sleepy morning grin melted our hearts entirely and started our obsession with making you laugh.", image: "baby-photo-3.jpg" },
+                { title: "Sitting Up & Giggling", date: "September 2025", desc: "Suddenly you were exploring the world sitting down, grabbing everything in sight with endless curiosity.", image: "baby-photo-4.jpg" },
+                { title: "First Tiny Steps", date: "February 2026", desc: "Wobbly, uncertain, but unstoppable! You're ready to run into your bright, beautiful future.", image: "baby-photo-5.jpg" },
+                { title: "Favorite Blankie Adventures", date: "March 2026", desc: "Inseparable from your favorite comfort toy as you discover new things every single day.", image: "baby-photo-7.jpg" }
+            ],
+
+            galleryImages: [
+                { url: "baby-photo-1.jpg", caption: "Sweet dreams & snuggles" },
+                { url: "baby-photo-2.jpg", caption: "Pure unfiltered laughter" },
+                { url: "baby-photo-3.jpg", caption: "Playtime adventures" },
+                { url: "baby-photo-4.jpg", caption: "Little explorer" },
+                { url: "baby-photo-5.jpg", caption: "Bath time bubbles" },
+                { url: "baby-photo-6.jpg", caption: "My favorite blankie" },
+                { url: "baby-photo-7.jpg", caption: "Precious milestones" }
+            ],
+
+            eventDetails: {
+                dateText: "Sunday, March 15, 2026",
+                timeText: "4:00 PM Onwards",
+                venueName: "The Rosewood Garden Estate",
+                venueAddress: "123 Sunshine Valley Road, Dreamville"
+            },
+
+            targetDateTime: "" 
+        };
+    </script>
+
+    <!-- NAVIGATION BAR -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass-card transition-all duration-300 py-3 px-6 md:px-12 flex justify-between items-center shadow-sm">
+        <a href="#" class="font-serif text-2xl font-bold text-pastel-accent tracking-wide flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-5 h-5 text-pastel-gold"></i>
+            <span id="nav-title">Niresh's 1st</span>
+        </a>
+        <div class="hidden md:flex space-x-8 text-sm font-semibold tracking-wider text-pastel-text">
+            <a href="#story" class="hover:text-pastel-accent transition">MILESTONES</a>
+            <a href="#gallery" class="hover:text-pastel-accent transition">GALLERY</a>
+            <a href="#event" class="hover:text-pastel-accent transition">THE PARTY</a>
+            <a href="#countdown-section" class="hover:text-pastel-accent transition">COUNTDOWN</a>
+        </div>
+        <a href="#countdown-section" class="bg-pastel-accent hover:bg-pastel-rose text-white font-semibold text-sm px-5 py-2 rounded-full shadow-md transition-all transform hover:-translate-y-0.5">
+            Cake Countdown
+        </a>
+    </nav>
+
+    <!-- HERO BANNER SECTION -->
+    <header class="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-6 overflow-hidden z-10">
+        <div class="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-pastel-rose/20 blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-10 right-10 w-96 h-96 rounded-full bg-pastel-gold/15 blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
+            <div class="text-center md:text-left space-y-6">
+                <div class="inline-flex items-center gap-2 bg-white/75 border border-pastel-rose/40 px-4 py-1.5 rounded-full shadow-sm text-pastel-accent text-xs font-bold tracking-widest uppercase backdrop-blur-sm">
+                    <i data-lucide="heart" class="w-3.5 h-3.5 fill-current"></i>
+                    <span id="hero-badge">A Milestone Celebration</span>
+                </div>
+                <h1 class="font-serif text-5xl md:text-7xl font-bold text-pastel-text leading-tight">
+                    Our Little Miracle is <span id="hero-age" class="text-pastel-accent italic">Turning One!</span>
+                </h1>
+                <p id="hero-subtitle" class="text-lg text-pastel-subtext leading-relaxed font-normal">
+                    A whole year of endless smiles, tiny footsteps, and pure magic. Join us to celebrate our little prince's first milestone!
+                </p>
+                <div class="pt-4 flex flex-col sm:flex-row justify-center md:justify-start gap-4">
+                    <a href="#event" class="bg-pastel-accent hover:bg-[#b8546c] text-white font-semibold px-8 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 text-center">
+                        View Party Details
+                    </a>
+                    <a href="#story" class="glass-card hover:bg-white/90 text-pastel-text border border-pastel-rose/50 font-semibold px-8 py-3.5 rounded-full shadow-sm transition-all text-center">
+                        Our Journey
+                    </a>
+                </div>
+            </div>
+
+            <!-- HERO PHOTO SLIDER WITH ARROWS -->
+            <div class="flex justify-center items-center relative">
+                <!-- Left Arrow Button -->
+                <button onclick="prevHeroImage()" aria-label="Previous Photo" class="absolute -left-4 md:-left-6 z-20 glass-card bg-white/90 hover:bg-white text-pastel-accent p-2.5 rounded-full shadow-md border border-pastel-rose/50 transition-all transform hover:scale-110">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                </button>
+
+                <div class="relative animate-float">
+                    <div class="absolute inset-0 bg-pastel-rose rounded-3xl transform rotate-3 scale-105 opacity-30"></div>
+                    <div class="relative glass-card p-4 pb-16 rounded-3xl shadow-xl max-w-sm w-full border border-pastel-pinkhover">
+                        <img id="hero-img" src="" alt="Baby photo" class="w-full h-80 object-cover rounded-2xl transition-opacity duration-300">
+                        <div class="absolute bottom-6 left-0 right-0 text-center">
+                            <h2 id="hero-child-name" class="font-serif text-3xl font-bold text-pastel-text">Niresh</h2>
+                            <p id="hero-caption" class="text-xs uppercase tracking-widest text-pastel-subtext mt-0.5">March 15 • One Year of Joy</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Arrow Button -->
+                <button onclick="nextHeroImage()" aria-label="Next Photo" class="absolute -right-4 md:-right-6 z-20 glass-card bg-white/90 hover:bg-white text-pastel-accent p-2.5 rounded-full shadow-md border border-pastel-rose/50 transition-all transform hover:scale-110">
+                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- OUR STORY / MILESTONES SECTION -->
+    <section id="story" class="py-24 px-6 relative z-10">
+        <div class="max-w-4xl mx-auto text-center mb-16">
+            <h2 id="story-title" class="font-serif text-4xl md:text-5xl font-bold text-pastel-text mb-4">365 Days of Pure Joy</h2>
+            <p id="story-subtitle" class="text-pastel-subtext text-lg max-w-2xl mx-auto">
+                From his very first cry to his first wobbly steps, look at how much love our little bundle brought into our lives.
+            </p>
+        </div>
+
+        <div class="max-w-3xl mx-auto space-y-12 relative before:absolute before:inset-0 before:left-1/2 before:-translate-x-1/2 before:w-0.5 before:bg-pastel-rose/30">
+            <div id="milestones-container" class="space-y-12 relative"></div>
+        </div>
+    </section>
+
+    <!-- PHOTO GALLERY SECTION -->
+    <section id="gallery" class="py-24 px-6 relative z-10">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-pastel-accent font-semibold tracking-widest text-xs uppercase block mb-2">Precious Moments</span>
+                <h2 class="font-serif text-4xl md:text-5xl font-bold text-pastel-text">Glimpses of First Year</h2>
+            </div>
+            <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+        </div>
+    </section>
+
+    <!-- EVENT DETAILS SECTION -->
+    <section id="event" class="py-24 px-6 relative overflow-hidden z-10">
+        <div class="max-w-4xl mx-auto relative z-10">
+            <div class="text-center mb-16">
+                <span class="text-pastel-accent font-semibold tracking-widest text-xs uppercase block mb-2">You're Invited</span>
+                <h2 class="font-serif text-4xl md:text-5xl font-bold text-pastel-text">Birthday Celebration Details</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="glass-card p-8 rounded-3xl shadow-md space-y-4">
+                    <div class="w-14 h-14 bg-pastel-rose/20 rounded-full flex items-center justify-center mx-auto text-pastel-accent">
+                        <i data-lucide="calendar" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-pastel-text">Date</h3>
+                    <p id="event-date" class="text-pastel-subtext font-medium">Sunday, March 15, 2026</p>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl shadow-md space-y-4">
+                    <div class="w-14 h-14 bg-pastel-rose/20 rounded-full flex items-center justify-center mx-auto text-pastel-accent">
+                        <i data-lucide="clock" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-pastel-text">Time</h3>
+                    <p id="event-time" class="text-pastel-subtext font-medium">4:00 PM Onwards</p>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl shadow-md space-y-4">
+                    <div class="w-14 h-14 bg-pastel-rose/20 rounded-full flex items-center justify-center mx-auto text-pastel-accent">
+                        <i data-lucide="map-pin" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-pastel-text">Location</h3>
+                    <p id="event-venue" class="text-pastel-subtext font-medium">The Rosewood Garden Estate<br><span class="text-xs text-pastel-subtext">123 Sunshine Valley Road</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- REAL-TIME COUNTDOWN & CAKE CUTTING CELEBRATION SECTION -->
+    <section id="countdown-section" class="py-24 px-6 relative z-10">
+        <div class="max-w-3xl mx-auto glass-card p-8 md:p-12 rounded-3xl shadow-xl text-center">
+            
+            <!-- COUNTDOWN VIEW (Visible initially) -->
+            <div id="countdown-container" class="space-y-8">
+                <div class="inline-flex items-center gap-2 bg-pastel-rose/30 px-4 py-1.5 rounded-full text-pastel-accent text-xs font-bold tracking-widest uppercase">
+                    <i data-lucide="timer" class="w-4 h-4"></i>
+                    <span>Real-Time Cake Cutting Countdown</span>
+                </div>
+                <h2 class="font-serif text-3xl md:text-4xl font-bold text-pastel-text">The Big Moment is Coming!</h2>
+                <p class="text-pastel-subtext text-sm">Watch the real-time countdown below. When time runs out, the celebration unlocks automatically!</p>
+                
+                <!-- Multi-Box Countdown Timer Display -->
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 py-4">
+                    <div class="bg-white/80 border border-pastel-rose/40 py-4 px-2 rounded-2xl shadow-sm">
+                        <span id="cd-months" class="font-serif text-3xl md:text-4xl font-bold text-pastel-accent">0</span>
+                        <span class="block text-xs uppercase tracking-widest text-pastel-subtext mt-1">Months</span>
+                    </div>
+                    <div class="bg-white/80 border border-pastel-rose/40 py-4 px-2 rounded-2xl shadow-sm">
+                        <span id="cd-days" class="font-serif text-3xl md:text-4xl font-bold text-pastel-accent">0</span>
+                        <span class="block text-xs uppercase tracking-widest text-pastel-subtext mt-1">Days</span>
+                    </div>
+                    <div class="bg-white/80 border border-pastel-rose/40 py-4 px-2 rounded-2xl shadow-sm">
+                        <span id="cd-hours" class="font-serif text-3xl md:text-4xl font-bold text-pastel-accent">0</span>
+                        <span class="block text-xs uppercase tracking-widest text-pastel-subtext mt-1">Hours</span>
+                    </div>
+                    <div class="bg-white/80 border border-pastel-rose/40 py-4 px-2 rounded-2xl shadow-sm">
+                        <span id="cd-mins" class="font-serif text-3xl md:text-4xl font-bold text-pastel-accent">0</span>
+                        <span class="block text-xs uppercase tracking-widest text-pastel-subtext mt-1">Mins</span>
+                    </div>
+                    <div class="bg-white/80 border border-pastel-rose/40 py-4 px-2 rounded-2xl shadow-sm col-span-2 sm:col-span-1">
+                        <span id="cd-secs" class="font-serif text-3xl md:text-4xl font-bold text-pastel-accent">10</span>
+                        <span class="block text-xs uppercase tracking-widest text-pastel-subtext mt-1">Secs</span>
+                    </div>
+                </div>
+
+                <div class="pt-2 flex justify-center gap-4">
+                    <button onclick="triggerDemo10Seconds()" class="text-xs bg-pastel-rose/30 hover:bg-pastel-rose/50 text-pastel-text px-4 py-2 rounded-full font-semibold transition">
+                        Test 10s Demo Timer ⏱️
+                    </button>
+                </div>
+            </div>
+
+            <!-- CAKE CUTTING CELEBRATION ANIMATION VIEW (Hidden until timer ends) -->
+            <div id="celebration-container" class="hidden space-y-6 animate-bounce-in py-6">
+                <h2 class="font-serif text-4xl md:text-5xl font-bold text-pastel-accent mt-4">🎉 Yay! It's Cake Cutting Time!</h2>
+                <p class="text-pastel-text text-base font-medium max-w-md mx-auto leading-relaxed">
+                    Make a wish, blow out the candles, and let's celebrate Niresh's wonderful first milestone together! 🎈✨
+                </p>
+                  
+                <!-- CELEBRATION VIDEO PLAYER -->
+                <video id="celebration-video" class="w-full max-w-2xl max-h-[60vh] object-contain mx-auto rounded-2xl shadow-lg border-4 border-pastel-rose/50 bg-black/5" controls playsinline>
+<source src="https://raw.githubusercontent.com/thewebvue/BirthDay-Website/main/Happy_birthday_video.mp4" type="video/mp4">                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- BACKGROUND MUSIC COMPONENT -->
+    <audio id="bg-music" loop>
+        <source src="birthday music.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- FLOATING AUDIO CONTROL TOGGLE BUTTON -->
+    <button onclick="toggleMusic()" id="music-toggle-btn" class="fixed bottom-6 right-6 z-50 glass-card bg-white/80 hover:bg-white text-pastel-accent p-3.5 rounded-full shadow-lg border border-pastel-rose/50 flex items-center gap-2 transition-all transform hover:scale-105">
+        <i data-lucide="volume-x" id="music-icon" class="w-5 h-5"></i>
+        <span class="text-xs font-semibold pr-1 hidden sm:inline" id="music-text">Play Music</span>
+    </button>
+
+    <!-- FOOTER -->
+    <footer class="py-12 px-6 text-center border-t border-pastel-rose/20 text-pastel-subtext text-sm relative z-10 glass-card">
+        <p class="font-serif text-lg text-pastel-text mb-2" id="footer-name">With love from Niresh's Family</p>
+        <p>© 2026 First Birthday Celebration. Built with love and templates.</p>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC & AUTOMATION SCRIPTS -->
+    <script>
+        // Initialize Lucide iconography across the page
+        lucide.createIcons();
+
+        // CAKE CUTTING WELCOME ANIMATION LOGIC
+        function cutCakeAnimation() {
+            const cake = document.getElementById('welcome-cake');
+            const knife = document.getElementById('knife-icon');
+            const prompt = document.getElementById('cut-prompt');
+            const wrapper = cake.parentElement;
+            
+            wrapper.onclick = null;
+            prompt.style.opacity = '0';
+            
+            knife.classList.remove('opacity-0', 'group-hover:opacity-100');
+            knife.classList.add('animate-chop');
+            
+            setTimeout(() => {
+                cake.classList.remove('animate-fly-cake');
+                cake.classList.add('animate-slice-cake');
+                
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 300,
+                        spread: 180,
+                        startVelocity: 50,
+                        origin: { y: 0.5 },
+                        colors: ['#fff0f3', '#f4acc4', '#d46a84', '#dfb15b', '#ffffff']
+                    });
+                }
+            }, 250);
+
+            setTimeout(() => {
+                enterInvitation();
+            }, 1000);
+        }
+
+        // UNLOCK AUDIO AND ENTER INVITATION
+        function enterInvitation() {
+            const overlay = document.getElementById('welcome-overlay');
+            const music = document.getElementById('bg-music');
+            const icon = document.getElementById('music-icon');
+            const text = document.getElementById('music-text');
+
+            let playPromise = music.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    icon.setAttribute('data-lucide', 'volume-2');
+                    text.innerText = 'Pause Music';
+                    lucide.createIcons();
+                }).catch(error => {
+                    console.log("Audio play blocked.", error);
+                });
+            }
+
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 1000); 
+        }
+
+        // HERO PHOTO SLIDER LOGIC
+        let currentHeroIndex = 0;
+
+        function updateHeroImage() {
+            const imgEl = document.getElementById('hero-img');
+            const captionEl = document.getElementById('hero-caption');
+            const currentImgData = clientData.heroImages[currentHeroIndex];
+            
+            imgEl.style.opacity = '0';
+            setTimeout(() => {
+                imgEl.src = currentImgData.url;
+                captionEl.innerText = currentImgData.caption;
+                imgEl.style.opacity = '1';
+            }, 150);
+        }
+
+        function nextHeroImage() {
+            currentHeroIndex = (currentHeroIndex + 1) % clientData.heroImages.length;
+            updateHeroImage();
+        }
+
+        function prevHeroImage() {
+            currentHeroIndex = (currentHeroIndex - 1 + clientData.heroImages.length) % clientData.heroImages.length;
+            updateHeroImage();
+        }
+
+        // Populate client information across elements
+        document.getElementById('nav-title').innerText = `${clientData.childName}'s 1st`;
+        document.getElementById('hero-badge').innerText = `${clientData.childName}'s Milestone Celebration`;
+        document.getElementById('hero-age').innerText = clientData.ageText;
+        document.getElementById('hero-subtitle').innerText = clientData.heroSubtitle;
+        document.getElementById('hero-child-name').innerText = clientData.childName;
+        
+        updateHeroImage();
+
+        document.getElementById('story-title').innerText = clientData.storyTitle;
+        document.getElementById('story-subtitle').innerText = clientData.storySubtitle;
+
+        // Dynamically build milestone timeline elements
+        const milestonesContainer = document.getElementById('milestones-container');
+        clientData.milestones.forEach((m, index) => {
+            const isEven = index % 2 === 0;
+            const itemHTML = `
+                <div class="flex flex-col md:flex-row items-center gap-8 relative ${isEven ? '' : 'md:flex-row-reverse'}">
+                    <div class="w-full md:w-1/2 text-center ${isEven ? 'md:text-right' : 'md:text-left'}">
+                        <div class="glass-card p-6 rounded-3xl shadow-sm inline-block max-w-md">
+                            <span class="text-xs font-bold text-pastel-accent uppercase tracking-wider">${m.date}</span>
+                            <h3 class="font-serif text-2xl font-bold text-pastel-text mt-1 mb-2">${m.title}</h3>
+                            <p class="text-pastel-subtext text-sm leading-relaxed">${m.desc}</p>
+                        </div>
+                    </div>
+                    <div class="absolute left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-pastel-rose border-4 border-pastel-cream hidden md:flex items-center justify-center text-white text-xs z-10">
+                        ❤️
+                    </div>
+                    <div class="w-full md:w-1/2 flex justify-center ${isEven ? 'md:justify-start' : 'md:justify-end'}">
+                        <img src="${m.image}" alt="${m.title}" class="w-64 h-44 object-cover rounded-2xl shadow-md border-4 border-white/80">
+                    </div>
+                </div>
+            `;
+            milestonesContainer.innerHTML += itemHTML;
+        });
+
+        // Dynamically build photo gallery grid items
+        const galleryGrid = document.getElementById('gallery-grid');
+        clientData.galleryImages.forEach(g => {
+            const galleryHTML = `
+                <div class="group relative overflow-hidden rounded-3xl shadow-md aspect-square glass-card">
+                    <img src="${g.url}" alt="${g.caption}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                        <p class="text-white font-medium text-sm">${g.caption}</p>
+                    </div>
+                </div>
+            `;
+            galleryGrid.innerHTML += galleryHTML;
+        });
+
+        // Populate event detail section contents
+        document.getElementById('event-date').innerText = clientData.eventDetails.dateText;
+        document.getElementById('event-time').innerText = clientData.eventDetails.timeText;
+        document.getElementById('event-venue').innerHTML = `${clientData.eventDetails.venueName}<br><span class="text-xs text-pastel-subtext">${clientData.eventDetails.venueAddress}</span>`;
+        document.getElementById('footer-name').innerText = `With love from ${clientData.childName}'s Family`;
+
+        // COUNTDOWN TIMER LOGIC
+        let countdownTimerInterval;
+        let targetTime;
+
+        function initCountdown() {
+            clearInterval(countdownTimerInterval);
+
+            if (clientData.targetDateTime && new Date(clientData.targetDateTime).getTime() > Date.now()) {
+                targetTime = new Date(clientData.targetDateTime).getTime();
+            } else {
+                targetTime = Date.now() + 100000;
+            }
+
+            document.getElementById('countdown-container').classList.remove('hidden');
+            document.getElementById('celebration-container').classList.add('hidden');
+
+            updateCountdownClock();
+            countdownTimerInterval = setInterval(updateCountdownClock, 1000);
+        }
+
+        function updateCountdownClock() {
+            const now = Date.now();
+            const difference = targetTime - now;
+
+            if (difference <= 0) {
+                clearInterval(countdownTimerInterval);
+                document.getElementById('countdown-container').classList.add('hidden');
+                document.getElementById('celebration-container').classList.remove('hidden');
+                
+                const video = document.getElementById('celebration-video');
+                if (video) {
+                    video.currentTime = 0; 
+                    let playPromise = video.play();
+                    
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                            video.muted = true;
+                            video.play();
+                        });
+                    }
+                }
+
+                lucide.createIcons();
+                return;
+            }
+
+            const secondsTotal = Math.floor(difference / 1000);
+            const months = Math.floor(secondsTotal / (3600 * 24 * 30.44));
+            const days = Math.floor((secondsTotal % (3600 * 24 * 30.44)) / (3600 * 24));
+            const hours = Math.floor((secondsTotal % (3600 * 24)) / 3600);
+            const minutes = Math.floor((secondsTotal % 3600) / 60);
+            const seconds = secondsTotal % 60;
+
+            document.getElementById('cd-months').innerText = months;
+            document.getElementById('cd-days').innerText = days;
+            document.getElementById('cd-hours').innerText = hours;
+            document.getElementById('cd-mins').innerText = minutes;
+            document.getElementById('cd-secs').innerText = seconds;
+        }
+
+        function triggerDemo10Seconds() {
+            clientData.targetDateTime = ""; 
+            initCountdown();
+        }
+
+        initCountdown();
+
+        // AUDIO MANUAL TOGGLE FUNCTION
+        function toggleMusic() {
+            const music = document.getElementById('bg-music');
+            const icon = document.getElementById('music-icon');
+            const text = document.getElementById('music-text');
+
+            if (music.paused) {
+                music.play();
+                icon.setAttribute('data-lucide', 'volume-2');
+                text.innerText = 'Pause Music';
+            } else {
+                music.pause();
+                icon.setAttribute('data-lucide', 'volume-x');
+                text.innerText = 'Play Music';
+            }
+            lucide.createIcons();
+        }
+
+        // BACKGROUND FLOATING PARTICLES GENERATOR
+        const bgIcons = ['🎈', '🎂', '🎉', '⭐', '✨', '🎈', '🧁', '🌟'];
+        const bgContainer = document.getElementById('background-animation-container');
+
+        function createBgElement() {
+            const el = document.createElement('div');
+            el.classList.add('bg-floating-item');
+            el.innerHTML = bgIcons[Math.floor(Math.random() * bgIcons.length)];
+            
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.animationDuration = (Math.random() * 8 + 10) + 's';
+            el.style.fontSize = (Math.random() * 18 + 20) + 'px';
+            
+            bgContainer.appendChild(el);
+
+            setTimeout(() => {
+                el.remove();
+            }, 18000);
+        }
+
+        setInterval(createBgElement, 450);
+
+        // SYNC VIDEO PLAYBACK WITH BACKGROUND MUSIC
+        const celebVideo = document.getElementById('celebration-video');
+        const backgroundMusic = document.getElementById('bg-music');
+        const musicIconEl = document.getElementById('music-icon');
+        const musicTextEl = document.getElementById('music-text');
+        
+        if (celebVideo && backgroundMusic) {
+            celebVideo.addEventListener('play', () => {
+                backgroundMusic.pause();
+                musicIconEl.setAttribute('data-lucide', 'volume-x');
+                musicTextEl.innerText = 'Play Music';
+                lucide.createIcons();
+            });
+
+            celebVideo.addEventListener('ended', () => {
+                let playPromise = backgroundMusic.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        musicIconEl.setAttribute('data-lucide', 'volume-2');
+                        musicTextEl.innerText = 'Pause Music';
+                        lucide.createIcons();
+                    }).catch(error => {
+                        console.log("Browser restricted background music resumption.");
+                    });
+                }
+            });
+        }
+
+        // AMBIENT CONFETTI BOMBING EFFECT EVERY 10 SECONDS
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 250,
+                    spread: 150,
+                    origin: { y: 0.5 }
+                });
+            }
+        }
+
+        triggerConfetti();
+        setInterval(triggerConfetti, 10000);
+
+    </script>
+</body>
+</html>
